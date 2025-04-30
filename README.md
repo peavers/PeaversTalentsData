@@ -4,6 +4,8 @@
 
 **A comprehensive data library for World of Warcraft addons that provides daily updated talent export codes from authoritative sources.**
 
+#### NEW! Check [peavers.io](https://peawvers.io) for latest addons!
+
 ## Overview
 
 PeaversTalentsData serves as a foundation library for other addons, offering reliable and up-to-date talent data. This library aggregates information from multiple trusted platforms to ensure players have access to the most current and effective talent builds.
