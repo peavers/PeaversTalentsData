@@ -92,14 +92,18 @@ function ConfigUI:InitializeOptions()
     -- Update content height based on the last element position
     content:SetHeight(math.abs(yPos) + 50)
 
-    -- Register with the Interface Options
-    addon.categoryID = Settings.RegisterCanvasLayoutCategory(panel, panel.name)
-    Settings.RegisterAddOnCategory(addon.categoryID)
-
+    -- Let PeaversCommons handle category registration
+    -- The panel will be added as the first subcategory automatically
+    
+    -- Add these callback functions
+    panel.OnRefresh = function() end
+    panel.OnCommit = function() end
+    panel.OnDefault = function() end
+    
     return panel
 end
 
 -- Initialize the configuration UI when called
 function ConfigUI:Initialize()
-    self:InitializeOptions()
+    self.panel = self:InitializeOptions()
 end
