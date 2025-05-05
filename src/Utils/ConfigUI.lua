@@ -4,101 +4,79 @@ local addonName, addon = ...
 local ConfigUI = {}
 addon.ConfigUI = ConfigUI
 
+-- Access PeaversCommons utilities
+local PeaversCommons = _G.PeaversCommons
+local ConfigUIUtils = PeaversCommons.ConfigUIUtils
+local FrameUtils = PeaversCommons.FrameUtils
+
 -- Creates and initializes the options panel
 function ConfigUI:InitializeOptions()
-    -- Create the main panel for the addon
-    local panel = CreateFrame("Frame")
-    panel.name = "PeaversTalentsData"
-
-    local scrollFrame = CreateFrame("ScrollFrame", nil, panel, "UIPanelScrollFrameTemplate")
-    scrollFrame:SetPoint("TOPLEFT", 10, -10)
-    scrollFrame:SetPoint("BOTTOMRIGHT", -30, 10)
-
-    local content = CreateFrame("Frame", nil, scrollFrame)
-    content:SetSize(scrollFrame:GetWidth(), 500)  -- Initial height, will be adjusted
-    scrollFrame:SetScrollChild(content)
-
-    local yPos = 0
-
-    -- Create header and description
-    local title = content:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-    title:SetPoint("TOPLEFT", 25, yPos)
-    title:SetText("Peavers Talents Data")
-    title:SetTextColor(1, 0.84, 0)  -- Gold color for main title
-    title:SetFont(title:GetFont(), 24, "OUTLINE")
-    yPos = yPos - 40
-
-    local subtitle = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-    subtitle:SetPoint("TOPLEFT", 25, yPos)
-    subtitle:SetText("Datasource for PeaversTalents and other addons")
-    subtitle:SetFont(subtitle:GetFont(), 14)
-    yPos = yPos - 30
-
-    -- Add separator
-    local separator = content:CreateTexture(nil, "ARTWORK")
-    separator:SetHeight(1)
-    separator:SetPoint("TOPLEFT", 25, yPos)
-    separator:SetPoint("TOPRIGHT", -25, yPos)
-    separator:SetColorTexture(0.3, 0.3, 0.3, 0.9)
-    yPos = yPos - 25
-
-    -- Information about the addon
-    local infoText = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    infoText:SetPoint("TOPLEFT", 25, yPos)
-    infoText:SetPoint("TOPRIGHT", -25, yPos)
-    infoText:SetJustifyH("LEFT")
-    infoText:SetText("This addon provides talent build data from various sources for use with PeaversTalents and other addons. It does not have any user interface of its own.")
-    infoText:SetSpacing(2)
-    yPos = yPos - 60
-
-    -- Data sources section
-    local sourcesHeader = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-    sourcesHeader:SetPoint("TOPLEFT", 25, yPos)
-    sourcesHeader:SetText("Available Data Sources:")
-    yPos = yPos - 25
-
-    -- List of sources
-    local sources = {
-        "Archon - Mythic dungeons and raid builds",
-        "Icy Veins - Mythic dungeons, raid, and miscellaneous builds",
-        "Wowhead - Mythic dungeons, raid, and miscellaneous builds",
-        "U.GG - Mythic dungeons and raid builds"
-    }
-
-    for _, source in ipairs(sources) do
-        local sourceText = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        sourceText:SetPoint("TOPLEFT", 45, yPos)
-        sourceText:SetPoint("TOPRIGHT", -25, yPos)
-        sourceText:SetJustifyH("LEFT")
-        sourceText:SetText("• " .. source)
-        yPos = yPos - 20
-    end
-
-    -- Update frequency section
-    yPos = yPos - 20
-    local updateHeader = content:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-    updateHeader:SetPoint("TOPLEFT", 25, yPos)
-    updateHeader:SetText("Update Frequency:")
-    yPos = yPos - 25
-
-    local updateText = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-    updateText:SetPoint("TOPLEFT", 45, yPos)
-    updateText:SetPoint("TOPRIGHT", -25, yPos)
-    updateText:SetJustifyH("LEFT")
-    updateText:SetText("Data is updated regularly to ensure you have access to the latest talent builds. Updates are typically released within 24-48 hours of changes on the source websites.")
-    updateText:SetSpacing(2)
-    yPos = yPos - 60
-
-    -- Update content height based on the last element position
-    content:SetHeight(math.abs(yPos) + 50)
-
-    -- Let PeaversCommons handle category registration
-    -- The panel will be added as the first subcategory automatically
+    -- Use the ConfigUIUtils to create a standard settings panel
+    local panel = ConfigUIUtils.CreateSettingsPanel(
+        "Settings",
+        "Datasource for PeaversTalents and other addons"
+    )
     
-    -- Add these callback functions
-    panel.OnRefresh = function() end
-    panel.OnCommit = function() end
-    panel.OnDefault = function() end
+    local content = panel.content
+    local yPos = panel.yPos
+    local baseSpacing = panel.baseSpacing
+    
+    -- Add information section
+    local infoHeader, newY = FrameUtils.CreateSectionHeader(content, "About", baseSpacing, yPos)
+    yPos = newY - 10
+    
+    -- Create information text
+    local infoText = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    infoText:SetPoint("TOPLEFT", baseSpacing + 15, yPos)
+    infoText:SetWidth(450)
+    infoText:SetJustifyH("LEFT")
+    infoText:SetSpacing(2)
+    infoText:SetText(
+        "This addon provides talent build data from various sources for use with PeaversTalents and other addons. It does not have any user interface of its own."
+    )
+    yPos = yPos - 50
+    
+    -- Data sources section
+    local sourcesHeader, newY = FrameUtils.CreateSectionHeader(content, "Available Data Sources", baseSpacing, yPos)
+    yPos = newY - 10
+    
+    -- Create sources text
+    local sourcesText = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    sourcesText:SetPoint("TOPLEFT", baseSpacing + 15, yPos)
+    sourcesText:SetWidth(450)
+    sourcesText:SetJustifyH("LEFT")
+    sourcesText:SetSpacing(2)
+    sourcesText:SetText(
+        "• Archon - Mythic dungeons and raid builds\n" ..
+        "• Icy Veins - Mythic dungeons, raid, and miscellaneous builds\n" ..
+        "• Wowhead - Mythic dungeons, raid, and miscellaneous builds\n" ..
+        "• U.GG - Mythic dungeons and raid builds"
+    )
+    
+    -- Calculate height of text and update yPos
+    local sourcesHeight = sourcesText:GetStringHeight() + 20
+    yPos = yPos - sourcesHeight
+    
+    -- Update frequency section
+    local updateHeader, newY = FrameUtils.CreateSectionHeader(content, "Update Frequency", baseSpacing, yPos)
+    yPos = newY - 10
+    
+    -- Create update text
+    local updateText = content:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    updateText:SetPoint("TOPLEFT", baseSpacing + 15, yPos)
+    updateText:SetWidth(450)
+    updateText:SetJustifyH("LEFT")
+    updateText:SetSpacing(2)
+    updateText:SetText(
+        "Data is updated regularly to ensure you have access to the latest talent builds. Updates are typically released within 24-48 hours of changes on the source websites."
+    )
+    
+    -- Calculate height of text and update yPos
+    local updateHeight = updateText:GetStringHeight() + 20
+    yPos = yPos - updateHeight
+    
+    -- Update content height
+    panel:UpdateContentHeight(yPos)
     
     return panel
 end
