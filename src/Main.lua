@@ -27,5 +27,5 @@ PeaversCommons.Events:Init(addonName, function()
     
     -- No other initialization needed - this is a data-only addon
 end, {
-    announceMessage = "PeaversTalentsData loaded. Used by PeaversTalents for talent builds."
+    announceMessage = "Data addon loaded for PeaversTalents"
 })
