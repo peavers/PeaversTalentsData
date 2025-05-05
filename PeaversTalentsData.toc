@@ -22,4 +22,8 @@ src/Data/WowheadMiscDB.lua
 src/Data/WowheadMythicDB.lua
 src/Data/WowheadRaidDB.lua
 
+src/Main.lua
 src/Api/Api.lua
+src/Utils/ConfigUI.lua
+src/Utils/Patrons.lua
+src/Utils/SupportUI.lua
