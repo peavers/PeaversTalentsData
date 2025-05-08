@@ -4,7 +4,8 @@
 
 **A comprehensive data library for World of Warcraft addons that provides daily updated talent export codes from authoritative sources.**
 
-#### NEW! Check [peavers.io](https://peawvers.io) for latest addons!
+### New!
+Check out [peavers.io](https://peavers.io) and [bootstrap.peavers.io](https://bootstrap.peavers.io) for all my WoW addons and support.
 
 ## Overview
 
